@@ -59,4 +59,12 @@
         android:id="@+id/bBiology"
         android:layout_below="@+id/bChemistry"
         android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CS"
+        android:id="@+id/bCS"
+        android:layout_above="@+id/bEnglish"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

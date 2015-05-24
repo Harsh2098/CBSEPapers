@@ -1,9 +1,12 @@
 package com.example.shantanu.cbsepapers;
 
+import android.annotation.TargetApi;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -23,7 +26,7 @@ import java.io.OutputStream;
 
 public class MainActivity extends ActionBarActivity {
 
-    Button bP,bE,bM,bC,bB ;
+    Button bP,bE,bM,bC,bB,bCS ;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,92 +37,47 @@ public class MainActivity extends ActionBarActivity {
 		bM= (Button) findViewById(R.id.bMaths);
 		bC= (Button) findViewById(R.id.bChemistry);
 		bB= (Button) findViewById(R.id.bBiology);
+		bCS = (Button) findViewById(R.id.bCS);
         copyFilesToSdCard();
-        bP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/CBSEPapers/paperP.pdf");
 
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				try {
-					startActivity(intent);
-				} catch (Exception e) {
-					Context c = getApplicationContext();
-					Toast.makeText(c,"You need to install a pdf reader first!! ", Toast.LENGTH_LONG).show();
-					e.printStackTrace();
-				}
+        bP.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				openList("P");
 			}
-        });
+		});
+		bCS.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v){
+				openList("CS");
+			}
+		});
 		bB.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/CBSEPapers/paperB.pdf");
-
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				try {
-					startActivity(intent);
-				} catch (Exception e) {
-					Context c = getApplicationContext();
-					Toast.makeText(c,"You need to install a pdf reader first!! ", Toast.LENGTH_LONG).show();
-					e.printStackTrace();
-				}
+				openList("B");
 			}
 		});
 		bC.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/CBSEPapers/paperC.pdf");
-
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				try {
-					startActivity(intent);
-				} catch (Exception e) {
-					Context c = getApplicationContext();
-					Toast.makeText(c,"You need to install a pdf reader first!! ", Toast.LENGTH_LONG).show();
-					e.printStackTrace();
-				}
+			public void onClick(View v){
+				openList("C");
 			}
 		});
 		bM.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/CBSEPapers/paperM.pdf");
-
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				try {
-					startActivity(intent);
-				} catch (Exception e) {
-					Context c = getApplicationContext();
-					Toast.makeText(c,"You need to install a pdf reader first!! ", Toast.LENGTH_LONG).show();
-					e.printStackTrace();
-				}
+			public void onClick(View v){
+				openList("M");
 			}
 		});
 		bE.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/CBSEPapers/paperE.pdf");
-
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				try {
-					startActivity(intent);
-				} catch (Exception e) {
-					Context c = getApplicationContext();
-					Toast.makeText(c,"You need to install a pdf reader first!! ", Toast.LENGTH_LONG).show();
-					e.printStackTrace();
-				}
+			public void onClick(View v){
+				openList("E");
 			}
+
 		});
+
 
     }
 
@@ -195,6 +153,26 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+
+	public void openList(String s){
+		Intent i = new Intent(this, PaperList.class);
+		i.putExtra("sub" , s);
+		startActivity(i);
+	}
+	/*public void downloadCS(){
+
+		String url = "https://drive.google.com/uc?export=download&id=0B-EW_p3AU2vwOThSc1FuZEFQS3M\n";
+		DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+		request.setTitle("File Downloaded");
+		request.setDescription("File is being downloaded");
+		request.setMimeType("application/pdf");
+		request.allowScanningByMediaScanner();
+		request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+		String name = "paperCS.pdf";
+		request.setDestinationInExternalPublicDir("/CBSEPapers",name);
+		DownloadManager manager = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
+		manager.enqueue(request);
+	}*/
 
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
