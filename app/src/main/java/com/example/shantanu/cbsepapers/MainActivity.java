@@ -43,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
         bP.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				openList("P");
+				openList("PHY");
 			}
 		});
 		bCS.setOnClickListener(new View.OnClickListener() {
@@ -55,25 +55,25 @@ public class MainActivity extends ActionBarActivity {
 		bB.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				openList("B");
+				openList("BIO");
 			}
 		});
 		bC.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v){
-				openList("C");
+				openList("CHM");
 			}
 		});
 		bM.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v){
-				openList("M");
+				openList("MAT");
 			}
 		});
 		bE.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v){
-				openList("E");
+				openList("ENG");
 			}
 
 		});

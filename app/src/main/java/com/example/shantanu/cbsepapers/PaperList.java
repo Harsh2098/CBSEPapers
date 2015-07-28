@@ -30,16 +30,18 @@ public class PaperList extends ActionBarActivity {
 
 		subject = b.getString("sub");
 		b1 = (Button) findViewById(R.id.b1);
+		b2 = (Button) findViewById(R.id.b2);
+		b3 = (Button) findViewById(R.id.b3);
 		switch (subject){
-			case "P":title.setText("Physics");
+			case "PHY":title.setText("Physics");
 				break;
-			case "M":title.setText("Maths");
+			case "MAT":title.setText("Maths");
 				break;
-			case "C":title.setText("Chemistry");
+			case "CHM":title.setText("Chemistry");
 				break;
-			case "B":title.setText("Biology");
+			case "BIO":title.setText("Biology");
 				break;
-			case "E":title.setText("English");
+			case "ENG":title.setText("English");
 				break;
 			case "CS":title.setText("Computer Science");
 				break;
@@ -47,7 +49,19 @@ public class PaperList extends ActionBarActivity {
 		b1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				OpenPDF();
+				OpenPDF("01");
+			}
+		});
+		b2.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				OpenPDF("02");
+			}
+		});
+		b3.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				OpenPDF("03");
 			}
 		});
 
@@ -60,8 +74,8 @@ public class PaperList extends ActionBarActivity {
 		return true;
 	}
 
-	void OpenPDF(){
-		File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/CBSEPapers/paper"+subject+".pdf");
+	void OpenPDF(String index){
+		File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/CBSEPapers/"+subject+index+".pdf");
 
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setDataAndType(Uri.fromFile(file), "application/pdf");
