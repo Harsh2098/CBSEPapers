@@ -2,6 +2,8 @@ package com.example.shantanu.cbsepapers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
@@ -50,18 +52,21 @@ public class PaperList extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				OpenPDF("01");
+				b3.setBackgroundColor(Color.rgb(99,33,33));
 			}
 		});
 		b2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				OpenPDF("02");
+				b3.setBackgroundColor(Color.rgb(99,33,33));
 			}
 		});
 		b3.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				OpenPDF("03");
+				b3.setBackgroundColor(Color.rgb(99,33,33));
 			}
 		});
 
