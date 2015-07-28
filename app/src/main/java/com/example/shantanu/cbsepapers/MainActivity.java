@@ -159,20 +159,7 @@ public class MainActivity extends ActionBarActivity {
 		i.putExtra("sub" , s);
 		startActivity(i);
 	}
-	/*public void downloadCS(){
 
-		String url = "https://drive.google.com/uc?export=download&id=0B-EW_p3AU2vwOThSc1FuZEFQS3M\n";
-		DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-		request.setTitle("File Downloaded");
-		request.setDescription("File is being downloaded");
-		request.setMimeType("application/pdf");
-		request.allowScanningByMediaScanner();
-		request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-		String name = "paperCS.pdf";
-		request.setDestinationInExternalPublicDir("/CBSEPapers",name);
-		DownloadManager manager = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
-		manager.enqueue(request);
-	}*/
 
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
