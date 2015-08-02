@@ -36,6 +36,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.shantanu.cbsepapers.MainActivity" />
         </activity>
+        <activity
+            android:name=".First"
+            android:label="@string/title_activity_first" >
+        </activity>
     </application>
 
 </manifest>

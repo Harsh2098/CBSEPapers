@@ -75,13 +75,13 @@ public class PaperList extends ActionBarActivity {
 				B3 = colors.getBoolean("CS03",false);
 				break;
 		}
-		if(B1 == true){
+		if(B1){
 			b1.setBackgroundColor(Color.rgb(99,33,33));
 		}
-		if(B2 == true){
+		if(B2){
 			b2.setBackgroundColor(Color.rgb(99,33,33));
 		}
-		if(B3 == true){
+		if(B3){
 			b3.setBackgroundColor(Color.rgb(99,33,33));
 		}
 		b1.setOnClickListener(new View.OnClickListener() {

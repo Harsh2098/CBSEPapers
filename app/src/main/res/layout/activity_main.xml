@@ -9,15 +9,6 @@
                 tools:context=".MainActivity"
                 >
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Physics"
-        android:id="@+id/bPhysics"
-        android:layout_centerVertical="true"
-        android:onClick="Click"
-        android:layout_centerHorizontal="true"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,43 +19,17 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="53dp"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Maths"
-        android:id="@+id/bMaths"
-        android:layout_above="@+id/bPhysics"
-        android:layout_centerHorizontal="true"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="42dp"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/layout"></LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="English"
-        android:id="@+id/bEnglish"
-        android:layout_above="@+id/bMaths"
-        android:layout_centerHorizontal="true"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chemistry"
-        android:id="@+id/bChemistry"
-        android:layout_below="@+id/bPhysics"
-        android:layout_centerHorizontal="true"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Biology"
-        android:id="@+id/bBiology"
-        android:layout_below="@+id/bChemistry"
-        android:layout_centerHorizontal="true"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CS"
-        android:id="@+id/bCS"
-        android:layout_above="@+id/bEnglish"
-        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

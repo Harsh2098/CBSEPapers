@@ -1,9 +1,11 @@
 package com.example.shantanu.cbsepapers;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
@@ -14,7 +16,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -32,20 +36,74 @@ public class MainActivity extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bP= (Button) findViewById(R.id.bPhysics);
-		bE= (Button) findViewById(R.id.bEnglish);
-		bM= (Button) findViewById(R.id.bMaths);
-		bC= (Button) findViewById(R.id.bChemistry);
-		bB= (Button) findViewById(R.id.bBiology);
-		bCS = (Button) findViewById(R.id.bCS);
-        copyFilesToSdCard();
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
+        bP = new Button(this);
+		bE = new Button(this);
+		bM = new Button(this);
+		bC = new Button(this);
+		bB = new Button(this);
+		bCS = new Button(this);
+
+        SharedPreferences preferences = getSharedPreferences("Subjects",MODE_PRIVATE);
+        if(preferences.getBoolean("first", true )){
+            copyFilesToSdCard();
+            Intent i = new Intent(this,First.class);
+            i.putExtra("isFromSettings", false);
+            startActivity(i);
+
+        }
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("first", false);
+        if(preferences.getBoolean("MAT",true)){
+            bM.setText("Maths");
+            bM.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT)
+            );
+            layout.addView(bM);
+        }if(preferences.getBoolean("PHY",true)){
+            bP.setText("Physics");
+            bP.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT)
+            );
+            layout.addView(bP);
+        }if(preferences.getBoolean("BIO",true)){
+            bB.setText("Biology");
+            bB.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT)
+            );
+            layout.addView(bB);
+        }if(preferences.getBoolean("CS",true)){
+            bCS.setText("Computer Science");
+            bCS.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT)
+            );
+            layout.addView(bCS);
+        }if(preferences.getBoolean("ENG",true)){
+            bE.setText("English");
+            bE.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT)
+            );
+            layout.addView(bE);
+        }if(preferences.getBoolean("CHM",true)){
+            bC.setText("Chemistry");
+            bC.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT)
+            );
+            layout.addView(bC);
+        }
 
         bP.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				openList("PHY");
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                openList("PHY");
+            }
+        });
 		bCS.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v){
@@ -175,10 +233,13 @@ public class MainActivity extends ActionBarActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
-		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
-			return true;
-		}
+		switch (id){
+            case R.id.changeSubs:
+                Intent i = new Intent(this,First.class);
+                i.putExtra("isFromSettings",true);
+                startActivity(i);
+                return true;
+        }
 
 		return super.onOptionsItemSelected(item);
 	}
