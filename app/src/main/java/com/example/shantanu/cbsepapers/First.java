@@ -1,5 +1,6 @@
 package com.example.shantanu.cbsepapers;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
@@ -50,7 +51,7 @@ public class First extends ActionBarActivity {
             BIO.setChecked(true);
         }
 
-
+        setTitle("Getting Started");
 
 
         Bundle b = getIntent().getExtras();
@@ -58,7 +59,59 @@ public class First extends ActionBarActivity {
         if(b.getBoolean("isFromSettings",false)){
             laayout.removeView(firstMessage);
             firstButton.setText("Return");
+            setTitle("Choose Subjects");
         }
+
+        MAT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("MAT", MAT.isChecked());
+                editor.commit();
+            }
+        });
+        PHY.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("PHY", PHY.isChecked());
+                editor.commit();
+            }
+        });
+        CHM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("CHM", CHM.isChecked());
+                editor.commit();
+            }
+        });
+        ENG.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("ENG", ENG.isChecked());
+                editor.commit();
+            }
+        });
+        CS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("CS", CS.isChecked());
+                editor.commit();
+            }
+        });
+        BIO.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("BIO", BIO.isChecked());
+                editor.commit();
+            }
+        });
+
+
 
 
         firstButton.setOnClickListener(new View.OnClickListener() {
