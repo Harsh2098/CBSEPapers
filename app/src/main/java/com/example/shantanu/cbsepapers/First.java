@@ -58,7 +58,7 @@ public class First extends ActionBarActivity {
 
         if(b.getBoolean("isFromSettings",false)){
             laayout.removeView(firstMessage);
-            firstButton.setText("Return");
+            laayout.removeView(firstButton);
             setTitle("Choose Subjects");
         }
 
