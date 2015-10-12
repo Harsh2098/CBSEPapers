@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Set;
+
 
 public class First extends ActionBarActivity {
 
@@ -52,6 +54,7 @@ public class First extends ActionBarActivity {
         }
 
         setTitle("Getting Started");
+
 
 
         Bundle b = getIntent().getExtras();
@@ -130,6 +133,9 @@ public class First extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("grade",12);
     }
 
     @Override

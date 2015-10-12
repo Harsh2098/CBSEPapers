@@ -1,25 +1,24 @@
 package com.example.shantanu.cbsepapers;
 
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,14 +27,39 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+
+    private ListView mDrawerList;
+    private ArrayAdapter<String> mAdapter;
+
+    TextView sub;
     Button bP,bE,bM,bC,bB,bCS ;
+    int grade;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        SharedPreferences preferences = getSharedPreferences("Subjects",MODE_PRIVATE);
+        final SharedPreferences.Editor editor = preferences.edit();
+        grade = preferences.getInt("grade",12);
+
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sub = (TextView) findViewById(R.id.tvSubject);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        sub.setText("Class "+grade);
+
         LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
         bP = new Button(this);
 		bE = new Button(this);
@@ -44,7 +68,22 @@ public class MainActivity extends ActionBarActivity {
 		bB = new Button(this);
 		bCS = new Button(this);
 
-        SharedPreferences preferences = getSharedPreferences("Subjects",MODE_PRIVATE);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        addItems();
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                grade = 12-i;
+                editor.putInt("grade",grade);
+                editor.commit();
+                sub.setText("Class "+Integer.toString(grade));
+
+            }
+        });
+
+
+
         if(preferences.getBoolean("first", true )){
             copyFilesToSdCard();
             Intent i = new Intent(this,First.class);
@@ -52,7 +91,7 @@ public class MainActivity extends ActionBarActivity {
             startActivity(i);
 
         }
-        SharedPreferences.Editor editor = preferences.edit();
+
         editor.putBoolean("first", false);
         if(preferences.getBoolean("MAT",true)){
             bM.setText("Maths");
@@ -137,10 +176,39 @@ public class MainActivity extends ActionBarActivity {
 		});
 
 
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        setDrawer();
+
     }
 
+    private void addItems(){
+        String[] grades = {"12","11"};
+        mAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,grades);
+        mDrawerList.setAdapter(mAdapter);
+
+    }
+
+    private void setDrawer(){
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.open,R.string.closed) {
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+            }
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu();
+            }
+        };
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 
+    }
 
     final static String TARGET_BASE_PATH = Environment.getExternalStorageDirectory().getPath()+"/CBSEPapers/";
 
@@ -215,6 +283,7 @@ public class MainActivity extends ActionBarActivity {
 	public void openList(String s){
 		Intent i = new Intent(this, PaperList.class);
 		i.putExtra("sub" , s);
+        i.putExtra("grade",grade);
 		startActivity(i);
 	}
 
@@ -226,7 +295,13 @@ public class MainActivity extends ActionBarActivity {
 		return true;
 	}
 
-	@Override
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -241,6 +316,9 @@ public class MainActivity extends ActionBarActivity {
                 return true;
         }
 
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
 		return super.onOptionsItemSelected(item);
 	}
 }

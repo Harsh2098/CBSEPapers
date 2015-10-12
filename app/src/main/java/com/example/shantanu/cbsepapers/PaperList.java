@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,11 +20,12 @@ import android.widget.Toast;
 import java.io.File;
 
 
-public class PaperList extends ActionBarActivity {
+public class PaperList extends AppCompatActivity {
 
 	TextView title;
 	Button b1,b2,b3;
 	String subject;
+	String grade;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,6 +34,8 @@ public class PaperList extends ActionBarActivity {
 		Bundle b = getIntent().getExtras();
 		Boolean B1 = null,B2=null,B3=null;
 		final SharedPreferences colors = getPreferences(MODE_PRIVATE);
+
+		grade = Integer.toString(b.getInt("grade"));
 
 		subject = b.getString("sub");
 		b1 = (Button) findViewById(R.id.b1);
@@ -75,7 +79,7 @@ public class PaperList extends ActionBarActivity {
 				B3 = colors.getBoolean("CS03",false);
 				break;
 		}
-		if(B1){
+		/*if(B1){
 			b1.setBackgroundColor(Color.rgb(99,33,33));
 		}
 		if(B2){
@@ -83,12 +87,12 @@ public class PaperList extends ActionBarActivity {
 		}
 		if(B3){
 			b3.setBackgroundColor(Color.rgb(99,33,33));
-		}
+		}*/
 		b1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				OpenPDF("01");
-				b1.setBackgroundColor(Color.rgb(99, 33, 33));
+
 				SharedPreferences.Editor editor = colors.edit();
 				editor.putBoolean(subject+"01",true);
 				editor.commit();
@@ -98,7 +102,7 @@ public class PaperList extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				OpenPDF("02");
-				b2.setBackgroundColor(Color.rgb(99,33,33));
+
 				SharedPreferences.Editor editor = colors.edit();
 				editor.putBoolean(subject + "02", true);
 				editor.commit();
@@ -108,7 +112,7 @@ public class PaperList extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				OpenPDF("03");
-				b3.setBackgroundColor(Color.rgb(99,33,33));
+
 				SharedPreferences.Editor editor = colors.edit();
 				editor.putBoolean(subject + "03", true);
 				editor.commit();
@@ -125,7 +129,7 @@ public class PaperList extends ActionBarActivity {
 	}
 
 	void OpenPDF(String index){
-		File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/CBSEPapers/"+subject+index+".pdf");
+		File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/CBSEPapers/"+grade+subject+index+".pdf");
 
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setDataAndType(Uri.fromFile(file), "application/pdf");

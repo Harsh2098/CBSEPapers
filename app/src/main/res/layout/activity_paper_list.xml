@@ -19,35 +19,29 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="47dp"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Paper 1"
-        android:id="@+id/b1"
-        android:layout_below="@+id/tvSub"
-        android:layout_marginTop="128dp"
-        android:layout_alignRight="@+id/b2"
-        android:layout_alignEnd="@+id/b2"
-        android:layout_alignLeft="@+id/b2"
-        android:layout_alignStart="@+id/b2"
-        android:background="#00CC66" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvSub">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/b2"
-        android:layout_below="@+id/b1"
-        android:layout_centerHorizontal="true"
-        android:text="Paper 2"
-        android:background="#00cc66" />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Paper 1"
+            android:id="@+id/b1" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Paper 3"
-        android:id="@+id/b3"
-        android:layout_below="@+id/b2"
-        android:layout_centerHorizontal="true"
-        android:background="#00cc66" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Paper 2"
+            android:id="@+id/b2" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Paper 3"
+            android:id="@+id/b3" />
+    </LinearLayout>
 
 </RelativeLayout>
