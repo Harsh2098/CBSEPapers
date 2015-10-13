@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="G12subs">
+        <item>Maths</item>
+        <item>Physics</item>
+        <item>Chemistry</item>
+        <item>English</item>
+        <item>Computer Science</item>
+        <item>Biology</item>
+    </string-array>
+</resources>

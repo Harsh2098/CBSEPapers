@@ -3,6 +3,7 @@ package com.example.shantanu.cbsepapers;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.os.Environment;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -35,38 +36,33 @@ public class MainActivity extends AppCompatActivity {
     private ListView mDrawerList;
     private ArrayAdapter<String> mAdapter;
 
-    TextView sub;
-    Button bP,bE,bM,bC,bB,bCS ;
+    int i;
+    TextView gradeTextView;
+    Button[] subButton;
+    String[] subList,subCode;
     int grade;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         SharedPreferences preferences = getSharedPreferences("Subjects",MODE_PRIVATE);
         final SharedPreferences.Editor editor = preferences.edit();
         grade = preferences.getInt("grade",12);
 
-
-
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        sub = (TextView) findViewById(R.id.tvSubject);
+        gradeTextView = (TextView) findViewById(R.id.tvSubject);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        sub.setText("Class "+grade);
-
+        gradeTextView.setText("Class "+grade);
         LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
-        bP = new Button(this);
-		bE = new Button(this);
-		bM = new Button(this);
-		bC = new Button(this);
-		bB = new Button(this);
-		bCS = new Button(this);
+
+        Resources res = getResources();
+        subList = res.getStringArray(R.array.G12subs);
+        subCode = res.getStringArray(R.array.G12subcodes);
 
         mDrawerList = (ListView) findViewById(R.id.navList);
         addItems();
@@ -74,15 +70,33 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                grade = 12-i;
-                editor.putInt("grade",grade);
+                grade = 12 - i;
+                editor.putInt("grade", grade);
                 editor.commit();
-                sub.setText("Class "+Integer.toString(grade));
+                gradeTextView.setText("Class " + Integer.toString(grade));
 
             }
         });
 
 
+        subButton = new Button[subList.length];
+        for(i=0;i<subList.length;i++)
+        {
+            subButton[i] = new Button(this);
+            subButton[i].setText(subList[i]);
+            subButton[i].setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT)
+            );
+            layout.addView(subButton[i]);
+            subButton[i].setId(i);
+            subButton[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openList(subList[view.getId()],subCode[view.getId()]);
+                }
+            });
+        }
 
         if(preferences.getBoolean("first", true )){
             copyFilesToSdCard();
@@ -93,87 +107,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         editor.putBoolean("first", false);
-        if(preferences.getBoolean("MAT",true)){
-            bM.setText("Maths");
-            bM.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT)
-            );
-            layout.addView(bM);
-        }if(preferences.getBoolean("PHY",true)){
-            bP.setText("Physics");
-            bP.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT)
-            );
-            layout.addView(bP);
-        }if(preferences.getBoolean("BIO",true)){
-            bB.setText("Biology");
-            bB.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT)
-            );
-            layout.addView(bB);
-        }if(preferences.getBoolean("CS",true)){
-            bCS.setText("Computer Science");
-            bCS.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT)
-            );
-            layout.addView(bCS);
-        }if(preferences.getBoolean("ENG",true)){
-            bE.setText("English");
-            bE.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT)
-            );
-            layout.addView(bE);
-        }if(preferences.getBoolean("CHM",true)){
-            bC.setText("Chemistry");
-            bC.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT)
-            );
-            layout.addView(bC);
-        }
 
-        bP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openList("PHY");
-            }
-        });
-		bCS.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v){
-				openList("CS");
-			}
-		});
-		bB.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				openList("BIO");
-			}
-		});
-		bC.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v){
-				openList("CHM");
-			}
-		});
-		bM.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v){
-				openList("MAT");
-			}
-		});
-		bE.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v){
-				openList("ENG");
-			}
-
-		});
 
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -182,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addItems(){
-        String[] grades = {"12","11"};
+        String[] grades = {"CBSE 12","CBSE 11"};
         mAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,grades);
         mDrawerList.setAdapter(mAdapter);
 
@@ -280,9 +214,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-	public void openList(String s){
+	public void openList(String sub,String subcode){
 		Intent i = new Intent(this, PaperList.class);
-		i.putExtra("sub" , s);
+        i.putExtra("subcode",subcode);
+		i.putExtra("sub" , sub);
         i.putExtra("grade",grade);
 		startActivity(i);
 	}
