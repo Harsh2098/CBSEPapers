@@ -107,7 +107,12 @@ public class PaperList extends AppCompatActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
+		switch (id){
+			case R.id.settings:
+				Intent i = new Intent(this,SettingsActivity.class);
+				startActivity(i);
 
+		}
 		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_settings) {
 			return true;

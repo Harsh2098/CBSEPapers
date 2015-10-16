@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Choose Subjects"
+        android:key="choose_subjects">
+        <CheckBoxPreference
+            android:key = "Maths"
+            android:title = "Maths"
+            android:defaultValue = "false"
+        />
+        <CheckBoxPreference
+            android:key = "Physics"
+            android:title = "Physics"
+            android:defaultValue = "false"
+            />
+        <CheckBoxPreference
+            android:key = "Chemistry"
+            android:title = "Chemistry"
+            android:defaultValue = "false"
+            />
+        <CheckBoxPreference
+            android:key = "English"
+            android:title = "English"
+            android:defaultValue = "false"
+            />
+        <CheckBoxPreference
+            android:key = "Computer Science"
+            android:title = "Computer Science"
+            android:defaultValue = "false"
+            />
+        <CheckBoxPreference
+            android:key = "Biology"
+            android:title = "Biology"
+            android:defaultValue = "false"
+            />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

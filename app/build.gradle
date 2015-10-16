@@ -5,11 +5,11 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "com.example.shantanu.cbsepapers"
+        applicationId "com.shantanu.cbsepapers"
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName "0.9"
     }
     buildTypes {
         release {

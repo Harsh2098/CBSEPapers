@@ -1,11 +1,16 @@
 package com.example.shantanu.cbsepapers;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -35,11 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView mDrawerList;
     private ArrayAdapter<String> mAdapter;
-
+    LinearLayout layout;
     int i;
     TextView gradeTextView;
+    TextView message;
     Button[] subButton;
     String[] subList,subCode;
+    Boolean[] subToggles;
     int grade;
 
     /** Called when the activity is first created. */
@@ -48,17 +55,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences preferences = getSharedPreferences("Subjects",MODE_PRIVATE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         final SharedPreferences.Editor editor = preferences.edit();
         grade = preferences.getInt("grade",12);
+        subToggles = new Boolean[6];
+        Boolean noSubjectsFlag = true;
+
+        PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
 
         gradeTextView = (TextView) findViewById(R.id.tvSubject);
+        message = (TextView) findViewById(R.id.textview);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        gradeTextView.setText("Class "+grade);
-        LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
+        gradeTextView.setText("Class " + grade);
+        layout = (LinearLayout) findViewById(R.id.layout);
 
         Resources res = getResources();
         subList = res.getStringArray(R.array.G12subs);
@@ -70,14 +82,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                mDrawerList.getChildAt(12-grade).setBackgroundColor(Color.argb(0xff, 0xee, 0xee, 0xee));
                 grade = 12 - i;
+                view.setBackgroundColor(Color.rgb(0x79,0x86,0xcb));
                 editor.putInt("grade", grade);
-                editor.commit();
+                editor.apply();
                 gradeTextView.setText("Class " + Integer.toString(grade));
+                mDrawerLayout.closeDrawers();
 
             }
         });
 
+        for(int i=0;i<6;i++){
+            subToggles[i] = preferences.getBoolean(subList[i],false);
+        }
 
         subButton = new Button[subList.length];
         for(i=0;i<subList.length;i++)
@@ -88,26 +106,27 @@ public class MainActivity extends AppCompatActivity {
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT)
             );
-            layout.addView(subButton[i]);
+            if(subToggles[i]) {
+                layout.addView(subButton[i]);
+                noSubjectsFlag = false;
+            }
             subButton[i].setId(i);
             subButton[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openList(subList[view.getId()],subCode[view.getId()]);
+                    openList(subList[view.getId()], subCode[view.getId()]);
                 }
             });
         }
-
+        if(noSubjectsFlag)
+            message.setText("Open settings to add subjects");
+        else
+            message.setText("Tap to view sample papers");
         if(preferences.getBoolean("first", true )){
-            copyFilesToSdCard();
-            Intent i = new Intent(this,First.class);
-            i.putExtra("isFromSettings", false);
-            startActivity(i);
-
+            CopyFiles c = new CopyFiles();
+            c.execute();
         }
-
-        editor.putBoolean("first", false);
-
+        editor.putBoolean("first", false).apply();
 
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -147,7 +166,11 @@ public class MainActivity extends AppCompatActivity {
     final static String TARGET_BASE_PATH = Environment.getExternalStorageDirectory().getPath()+"/CBSEPapers/";
 
     private void copyFilesToSdCard() {
-        copyFileOrDir(""); // copy all files in assets folder in my project
+
+
+
+        copyFileOrDir("");
+         // copy all files in assets folder in my project
     }
 
     private void copyFileOrDir(String path) {
@@ -237,18 +260,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        boolean noSubjectsflag = true;
+        layout.removeAllViews();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        for (int i=0;i<subList.length;i++){
+            if(preferences.getBoolean(subList[i],false)) {
+                layout.addView(subButton[i]);
+                noSubjectsflag = false;
+            }
+        }
+        if(noSubjectsflag)
+            message.setText("Open settings to add subjects");
+        else
+            message.setText("Tap to view sample papers");
+
+
+    }
+
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-
-		switch (id){
-            case R.id.changeSubs:
-                Intent i = new Intent(this,First.class);
-                i.putExtra("isFromSettings",true);
+        switch (id){
+            case R.id.settings:
+                Intent i = new Intent(this,SettingsActivity.class);
                 startActivity(i);
-                return true;
+
         }
 
         if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -256,4 +297,28 @@ public class MainActivity extends AppCompatActivity {
         }
 		return super.onOptionsItemSelected(item);
 	}
+    private class CopyFiles extends AsyncTask<Void,Void,Void>{
+
+        ProgressDialog progress;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress = new ProgressDialog(MainActivity.this);
+            progress.setTitle("Loading");
+            progress.setMessage("Copying Files");
+            progress.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            copyFilesToSdCard();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progress.dismiss();
+        }
+    }
 }
